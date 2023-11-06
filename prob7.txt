@@ -1,0 +1,41 @@
+Problem Statement 7 :
+Write a PL/SQL stored Procedure for following requirements and call the procedure in
+appropriate PL/SQL block.
+a. Borrower(Rollin, Name, DateofIssue, NameofBook, Status)
+b. Fine(Roll_no,Date,Amt)
+Accept roll_no & name of book from user.
+Check the number of days (from date of issue), if days are between 15 to 30 then fine
+amount will be Rs 5per day.
+If no. of days>30, per day fine will be Rs 50 per day & for days less than 30, Rs. 5 per
+day.
+Solution :
+sql> create table borrower(rollin int primary key,name varchar(20),dateofissue
+date,nameofbook varchar(20),status varchar(20));
+sql> create table fine(rollno int,foreign key(rollno) references borrower(rollin),returndate
+date,amount int);
+SQL> insert into borrower values(1,'abc','01-AUG-2017','SEPM','PEN');
+SQL> insert into borrower values(2,'xyz','01-JULY-2017','DBMS','PEN');
+SQL> insert into borrower values(3,'pqr','08-AUG-2015','DBMS','PEN');
+PROCEDURE calc_fine_lib() AS
+DECLARE
+roll number;
+fine1 number;
+noofdays int;
+issuedate date;
+BEGIN
+roll:=&roll;
+select dateofissue into issuedate from borrower where rollin = roll;
+SELECT TO_DATE(sysdate,'DD-MON-YYYY') - TO_DATE(issuedate,'DD-MON-YY') INTO
+noofdays FROM dual;
+if noofdays>15 and noofdays<=30 then
+fine1:=noofdays*5;
+insert into fine values(roll,'30-AUG-2017',fine1);
+elsif noofdays>30 then
+fine1:=((noofdays-30)*50) + 15*5;
+else
+insert into fine values(roll,'30-AUG-2017',fine1);
+end if;
+insert into fine values(roll,'30-AUG-2017',0);
+update borrower set status='return' where rollin=roll;
+end ;
+/

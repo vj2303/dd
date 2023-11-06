@@ -1,0 +1,83 @@
+-- Create the Account table
+CREATE TABLE Account (
+    Acc_no NUMBER(10) PRIMARY KEY,
+    branch_name VARCHAR2(50) NOT NULL,
+    balance NUMBER(10) NOT NULL
+);
+
+-- Create the Branch table
+CREATE TABLE Branch (
+    branch_name VARCHAR2(50) PRIMARY KEY,
+    branch_city VARCHAR2(50),
+    assets NUMBER(10)
+);
+
+-- Insert sample data into the Account table
+INSERT INTO Account (Acc_no, branch_name, balance)
+VALUES (1, 'BranchA', 10000);
+
+-- Insert sample data into the Branch table
+INSERT INTO Branch (branch_name, branch_city, assets)
+VALUES ('BranchA', 'CityA', 50000);
+
+-- a) Create a view on the Account table by selecting two columns
+CREATE OR REPLACE VIEW Account_View AS
+SELECT Acc_no, branch_name FROM Account;
+
+-- Perform insert, update, and delete operations on the view
+-- Insert operation
+INSERT INTO Account_View (Acc_no, branch_name)
+VALUES (2, 'BranchB');
+
+-- Update operation
+UPDATE Account_View
+SET branch_name = 'BranchC'
+WHERE Acc_no = 1;
+
+-- Delete operation
+DELETE FROM Account_View
+WHERE Acc_no = 2;
+
+-- b) Create a view on both Account and Branch tables by selecting one column from each
+CREATE OR REPLACE VIEW Account_Branch_View AS
+SELECT Acc_no, branch_name, branch_city
+FROM Account a
+JOIN Branch b ON a.branch_name = b.branch_name;
+
+-- Perform insert, update, and delete operations on the view
+-- Insert operation
+INSERT INTO Account_Branch_View (Acc_no, branch_name, branch_city)
+VALUES (3, 'BranchD', 'CityB');
+
+-- Update operation
+UPDATE Account_Branch_View
+SET branch_name = 'BranchE'
+WHERE Acc_no = 1;
+
+-- Delete operation
+DELETE FROM Account_Branch_View
+WHERE Acc_no = 3;
+
+-- c) Create an updatable view on the Account table by selecting two columns
+CREATE OR REPLACE VIEW Updatable_Account_View AS
+SELECT Acc_no, branch_name, balance
+FROM Account;
+
+-- Perform insert, update, and delete operations on the updatable view
+-- Insert operation
+INSERT INTO Updatable_Account_View (Acc_no, branch_name, balance)
+VALUES (4, 'BranchF', 20000);
+
+-- Update operation
+UPDATE Updatable_Account_View
+SET balance = 15000
+WHERE Acc_no = 1;
+
+-- Delete operation
+DELETE FROM Updatable_Account_View
+WHERE Acc_no = 4;
+
+-- Drop the views
+DROP VIEW Account_View;
+DROP VIEW Account_Branch_View;
+DROP VIEW Updatable_Account_View;

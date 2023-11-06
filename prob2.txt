@@ -1,0 +1,34 @@
+Problem Statement 2: Account(Acc_no, branch_name,balance)
+branch(branch_name,branch_city,assets)
+customer(cust_name,cust_street,cust_city) Depositor(cust_name,acc_no)
+Loan(loan_no,branch_name,amount)
+Borrower(cust_name,loan_no)
+Solve following query:
+Create above tables with appropriate constraints like primary key, foreign key, check constrains, not
+null etc
+Q1. Find all customers who have both account and loan at bank.
+Q2. Find all customer who have account but no loan at the bank.
+Q3. Find average account balance at Akurdi branch.
+Q4. Find the average account balance at each branch
+Q5. Find no. of depositors at each branch
+Table Creation same as above
+Q 1 Find all customers who have both an account and a loan at the bank.
+SELECT DISTINCT D.cust_name
+FROM Depositor D
+INNER JOIN Borrower B ON D.cust_name = B.cust_name;
+Q2. Find all customers who have an account but no loan at the bank.
+SELECT DISTINCT D.cust_name
+FROM Depositor D
+WHERE D.cust_name NOT IN (SELECT cust_name FROM Borrower);
+Q3. Find the average account balance at the Akurdi branch.
+SELECT AVG(balance) AS avg_balance
+FROM Account
+WHERE branch_name = 'Akurdi';
+Q4. Find the average account balance at each branch.
+SELECT branch_name, AVG(balance) AS avg_balance
+FROM Account
+GROUP BY branch_name;
+Q5. Find the number of depositors at each branch.
+SELECT branch_name, COUNT(*) AS num_depositors
+FROM Depositor
+GROUP BY branch_name;

@@ -1,0 +1,82 @@
+Problem Statement 4:
+solve following join operations.
+a. Create following Tables
+cust_mstr(cust_no,fname,lname)
+add_dets(code_no,add1,add2,state,city,pincode)
+Retrieve the address of customer Fname as 'Ramesh' and Lname as 'Shinde'
+b.Create following Tables
+cust_mstr(custno,fname,lname)
+acc_fd_cust_dets(codeno,acc_fd_no)
+fd_dets(fd_sr_no,amt)
+List the customer holding fixed deposit of amount more than 5000
+c. Create following Tables
+emp_mstr(e_mpno,f_name,l_name,m_name,dept,desg,branch_no)
+branch_mstr(name,b_no)
+List the employee details along with branch names to which they belong
+Solution :
+a. Create the tables and retrieve the address of the customer with Fname as 'Ramesh' and
+Lname as 'Shinde'.
+-- Create the cust_mstr table
+CREATE TABLE cust_mstr (
+ cust_no INT PRIMARY KEY,
+ fname VARCHAR(255),
+ lname VARCHAR(255)
+);
+-- Create the add_dets table
+CREATE TABLE add_dets (
+ code_no INT PRIMARY KEY,
+ add1 VARCHAR(255),
+ add2 VARCHAR(255),
+ state VARCHAR(255),
+ city VARCHAR(255),
+ pincode INT
+);
+-- Retrieve the address of the customer
+SELECT add1, add2, state, city, pincode
+FROM cust_mstr
+JOIN add_dets ON cust_mstr.cust_no = add_dets.code_no
+WHERE fname = 'Ramesh' AND lname = 'Shinde';
+b. Create the tables and list the customers holding fixed deposits of more than 5000.
+-- Create the cust_mstr table
+CREATE TABLE cust_mstr (
+ custno INT PRIMARY KEY,
+ fname VARCHAR(255),
+ lname VARCHAR(255)
+);
+-- Create the acc_fd_cust_dets table
+CREATE TABLE acc_fd_cust_dets (
+ codeno INT,
+ acc_fd_no INT
+);
+-- Create the fd_dets table
+CREATE TABLE fd_dets (
+ fd_sr_no INT PRIMARY KEY,
+ amt DECIMAL(10, 2)
+);
+-- List the customers holding fixed deposits of more than 5000
+SELECT fname, lname
+FROM cust_mstr
+JOIN acc_fd_cust_dets ON cust_mstr.custno = acc_fd_cust_dets.codeno
+JOIN fd_dets ON acc_fd_cust_dets.acc_fd_no = fd_dets.fd_sr_no
+WHERE amt > 5000;
+c. Create the tables and list the employee details along with the branch names to which they
+belong.
+-- Create the emp_mstr table
+CREATE TABLE emp_mstr (
+ e_mpno INT PRIMARY KEY,
+ f_name VARCHAR(255),
+ l_name VARCHAR(255),
+ m_name VARCHAR(255),
+ dept VARCHAR(255),
+ desg VARCHAR(255),
+ branch_no INT
+);
+-- Create the branch_mstr table
+CREATE TABLE branch_mstr (
+ name VARCHAR(255),
+ b_no INT PRIMARY KEY
+);
+-- List the employee details along with branch names
+SELECT e_mpno, f_name, l_name, m_name, dept, desg, name AS branch_name
+FROM emp_mstr
+JOIN branch_mstr ON emp_mstr.branch_no = branch_mstr.b_no;
